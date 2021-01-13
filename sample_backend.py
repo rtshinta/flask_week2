@@ -58,21 +58,42 @@ def get_user(id):
         return ({})
     return users
 
-@app.route('/users', methods=['GET', 'POST'])
+@app.route('/users', methods=['GET', 'POST', 'DELETE'])
 def get_users():
-   if request.method == 'GET':
-      search_username = request.args.get('name')
-      if search_username :
-         subdict = {'users_list' : []}
-         for user in users['users_list']:
-            if user['name'] == search_username:
-               subdict['users_list'].append(user)
-         return subdict
-      return users
-   elif request.method == 'POST':
-      userToAdd = request.get_json()
-      users['users_list'].append(userToAdd)
-      resp = jsonify(success=True)
-      #resp.status_code = 200 #optionally, you can always set a response code. 
-      # 200 is the default code for a normal response
-      return resp
+    if request.method == 'GET':
+        search_username = request.args.get('name')
+        search_job = request.args.get('job')
+        if search_username and search_job:
+            subdict = {'users_list' : []}
+            for user in users['users_list']:
+                if user['name'] == search_username and user['job'] == search_job:
+                    subdict['users_list'].append(user)
+            return subdict
+        if search_username:
+            subdict = {'users_list' : []}
+            for user in users['users_list']:
+                if user['name'] == search_username:
+                    subdict['users_list'].append(user)
+            return subdict
+        return users
+    elif request.method == 'POST':
+        userToAdd = request.get_json()
+        users['users_list'].append(userToAdd)
+        resp = jsonify(success=True)
+        #resp.status_code = 200 #optionally, you can always set a response code. 
+        # 200 is the default code for a normal response
+        return resp
+    elif request.method == 'DELETE':
+        userToDelete = request.get_json()
+        if userToDelete:
+            count = 0
+            for user in users['users_list']:
+                if user['id'] == userToDelete['id'] and user['job'] == userToDelete['job'] and user['name'] == userToDelete['name']:
+                    users['users_list'].pop(count)
+                    resp = jsonify(success=True)
+                    return resp
+                count += 1
+        return jsonify(success=False)
+    
+
+
