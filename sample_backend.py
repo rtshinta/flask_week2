@@ -84,11 +84,11 @@ def get_users():
         # 200 is the default code for a normal response
         return resp
     elif request.method == 'DELETE':
-        userToDelete = request.get_json()
+        userToDelete = request.args.get('name')
         if userToDelete:
             count = 0
             for user in users['users_list']:
-                if user['id'] == userToDelete['id'] and user['job'] == userToDelete['job'] and user['name'] == userToDelete['name']:
+                if user['name'] == userToDelete:
                     users['users_list'].pop(count)
                     resp = jsonify(success=True)
                     return resp
