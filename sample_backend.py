@@ -103,6 +103,7 @@ def get_users():
                 if user['name'] == userToDelete:
                     users['users_list'].pop(count)
                     resp = jsonify(success=True)
+                    resp.status_code = 201
                     return resp
                 count += 1
         return jsonify(success=False)
