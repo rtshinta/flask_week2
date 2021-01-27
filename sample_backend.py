@@ -58,7 +58,7 @@ def get_user(id):
         # Return a 404 status code if it was not successful
         #print(resp)
         if resp['n'] == 1 and resp['ok'] == 1.0:
-            return resp, 201
+            return resp, 204
         return jsonify({"error": "User not found"}), 404
 
 """def find_users_by_name_job(name, job):
